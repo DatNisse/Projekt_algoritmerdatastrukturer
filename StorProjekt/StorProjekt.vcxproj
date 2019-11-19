@@ -151,7 +151,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataClass.cpp" />
+    <ClCompile Include="DataCollector.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataClass.h" />
+    <ClInclude Include="DataCollector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="tempdata4.txt" />
+    <Text Include="tempdata4short.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
