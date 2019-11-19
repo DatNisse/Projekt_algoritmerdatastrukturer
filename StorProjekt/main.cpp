@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "DataClass.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ void printMenu()
 int main()
 {
 
+	DC::DataClass dataClass;
 	int choice;
 	do 
 	{

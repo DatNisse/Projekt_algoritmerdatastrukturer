@@ -1,14 +1,16 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace Collector
 {
 	class DataCollector
 	{
 	public:
+		
 		DataCollector();
-
-		std::string ReadData();
+		std::vector<std::string> rawData;
+		int ReadData();
 
 	};
 }

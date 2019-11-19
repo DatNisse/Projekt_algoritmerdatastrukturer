@@ -5,12 +5,9 @@
 using namespace std;
 
 using namespace DC;
+using namespace Collector;
 
 
-struct data
-{
-	int a;
-};
 
 
 
@@ -19,12 +16,15 @@ void DataClass::getData()
 	
 	Collector::DataCollector coll;
 
-	string temp = coll.ReadData();
+	int p = coll.ReadData();
+
 	
+
 }
 
 DataClass::DataClass()
 {
+	Collector::DataCollector collector;
 	getData();
 }
 
