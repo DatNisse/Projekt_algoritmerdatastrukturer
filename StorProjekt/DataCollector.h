@@ -10,7 +10,8 @@ namespace Collector
 		
 		DataCollector();
 		std::vector<std::string> rawData;
-		int ReadData();
+		void readData();
+		
 
 	};
 }

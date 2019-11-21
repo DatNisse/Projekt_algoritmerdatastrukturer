@@ -26,6 +26,7 @@ int main()
 
 	DC::DataClass dataClass;
 	int choice;
+	
 	do 
 	{
 		printMenu();

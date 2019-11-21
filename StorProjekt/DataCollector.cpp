@@ -13,10 +13,11 @@ DataCollector::DataCollector()
 
 }
 
-int DataCollector::ReadData()
+void DataCollector::readData()
 {
+	int n = 0;
 	string tmp;
-	ifstream text("tempdata4short.txt");
+	ifstream text("tempdata4.txt");
 
 	if (text.is_open())
 	{
@@ -32,11 +33,18 @@ int DataCollector::ReadData()
 			rawData.push_back(tmp);
 			getline(text, tmp);
 			rawData.push_back(tmp);
-
+			n++;
+			if (n%10000 == 0)
+			{
+				cout << ".";
+			}
 		}
+		cout << endl;
 	}
 
-	return int(&(rawData));
+	
 }
+
+
 
 

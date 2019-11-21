@@ -8,20 +8,25 @@ namespace DC
 	{
 	private:
 		
-		void getData();
-		
 		struct data
 		{
 			int day[3];
-			int time[2];
+			int time[3];
 			bool inside;
 			double temp;
 			int humid;
 		};
-		std::vector<data> dataVector;
+
+		Collector::DataCollector coll;
+		void getData();
+		
+		
+		std::vector < DC::DataClass::data > dataVector;
+
+		
 
 	public:
-
+		
 		DataClass();
 
 	};
