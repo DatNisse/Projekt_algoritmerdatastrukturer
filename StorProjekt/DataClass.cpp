@@ -99,16 +99,6 @@ int DC::DataClass::partition(int low, int high, char type)
 				swap(&dataVector[i], &dataVector[j]);
 			}
 		}
-		else if (type == 'i')
-		{
-			// If current element is smaller than the pivot  
-			
-		}
-		else if (type == 'o')
-		{
-			// If current element is smaller than the pivot  
-			
-		}
 	}
 	swap(&dataVector[i + 1], &dataVector[high]);
 	return (i + 1);
@@ -116,9 +106,19 @@ int DC::DataClass::partition(int low, int high, char type)
 	//return 0;
 }
 
-void DC::DataClass::listSort(bool inside, char type) //sorts list depending on requested value
+void DC::DataClass::listSort(char type, int low, int high) //sorts list depending on requested value
 {
+	if (low < high)
+	{
+		/* pi is partitioning index, arr[p] is now
+		at right place */
+		int pi = partition(low, high, type);
 
+		// Separately sort elements before  
+		// partition and after partition  
+		listSort(low, pi - 1, type);
+		listSort(pi + 1, high, type);
+	}
 }
 
 

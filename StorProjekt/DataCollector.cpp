@@ -114,9 +114,9 @@ double DataCollector::moldIndex(int h, double t)
 			Since the angle of the horizontal line is also unchanging, it can be described as "t / 78" for the same effect. Values above 1 does have a chance of mold.
 		*/
 
-	double k0 = 22 / 15, kv; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
+	double k0, kv; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
 	double mold;
-
+	k0 = 22 / 15;
 	if (t <= 0 || t > 50) // if any of these cases are true, the data points slope is outside the "mold-zone", therefore default value is set to 0.
 	{
 		mold = 0;

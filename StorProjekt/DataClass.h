@@ -16,31 +16,21 @@ namespace DC
 			double avgT;
 			double avgH;
 		};
-		
-		
-		
-
-		double calcAvreage(bool inside, int type, int refInd[2]);
+		Collector::DataCollector coll;
+		std::vector < DC::DataClass::dataDay > dataVector;
 
 		void swap(dataDay* a, dataDay* b);
 		int partition(int low, int high, char type);
-		void listSort(bool inside, char type);
+		void listSort(char type, int low, int high);
 		void inoutSort(bool inside);
 
-		Collector::DataCollector coll;
+		double calcAvreage(bool inside, int type, int refInd[2]);
 		void getData(bool inside);
 		
-		
-		
-
-		
-		std::vector < DC::DataClass::dataDay > dataVector;
 
 	public:
-		
-		double avreage();
-		double minMax();
-		
+		double avreage(bool inside, char type);
+		double minMax(bool inside, char type, int date[3]);
 
 		DataClass();
 

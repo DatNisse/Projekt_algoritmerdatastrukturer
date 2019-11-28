@@ -22,9 +22,8 @@ namespace Collector
 		void sortDataDetail();
 		std::vector<std::string> rawData;
 		double moldIndex(int h, double t);
-
-	public:
 		void readData();
+	public:
 		int getIndex(int date[3], int prevIndex);
 		DataCollector();
 		std::vector<data> listDataDetail;
