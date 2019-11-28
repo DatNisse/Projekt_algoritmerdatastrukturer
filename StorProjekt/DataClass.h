@@ -8,28 +8,33 @@ namespace DC
 	{
 	private:
 		
-		void calcAvreage(bool inside);
-		void calcMinMax(bool inside, bool max);
-
-		Collector::DataCollector coll;
-		void getData();
-		
-		
-		std::vector < DC::DataClass::dataDay > dataVector;
-
 		struct dataDay
 		{
 			int day[3];
 			bool inside;
-			double mogel;
-			double topT;
+			double avgM;
 			double avgT;
-			double lowT;
-			int topH;
-			int avgH;
-			int lowH;
+			double avgH;
 		};
+		
+		
+		
 
+		double calcAvreage(bool inside, int type, int refInd[2]);
+
+		void swap(dataDay* a, dataDay* b);
+		int partition(int low, int high, char type);
+		void listSort(bool inside, char type);
+		void inoutSort(bool inside);
+
+		Collector::DataCollector coll;
+		void getData(bool inside);
+		
+		
+		
+
+		
+		std::vector < DC::DataClass::dataDay > dataVector;
 
 	public:
 		

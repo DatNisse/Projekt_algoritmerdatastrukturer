@@ -23,7 +23,7 @@ void printMenu()
 
 int main()
 {
-
+	cout << "start" << endl;
 	DC::DataClass dataClass;
 	int choice;
 	
