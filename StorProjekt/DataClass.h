@@ -8,25 +8,35 @@ namespace DC
 	{
 	private:
 		
-		struct data
-		{
-			int day[3];
-			int time[3];
-			bool inside;
-			double temp;
-			int humid;
-		};
+		void calcAvreage(bool inside);
+		void calcMinMax(bool inside, bool max);
 
 		Collector::DataCollector coll;
 		void getData();
 		
 		
-		std::vector < DC::DataClass::data > dataVector;
+		std::vector < DC::DataClass::dataDay > dataVector;
 
-		
+		struct dataDay
+		{
+			int day[3];
+			bool inside;
+			double mogel;
+			double topT;
+			double avgT;
+			double lowT;
+			int topH;
+			int avgH;
+			int lowH;
+		};
+
 
 	public:
 		
+		double avreage();
+		double minMax();
+		
+
 		DataClass();
 
 	};

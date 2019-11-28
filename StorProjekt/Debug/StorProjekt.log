@@ -1,3 +1,6 @@
 ﻿  DataClass.cpp
+  DataCollector.cpp
+  main.cpp
+  Generating Code...
 C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(24,20): warning C4018: '<': signed/unsigned mismatch
   StorProjekt.vcxproj -> C:\Projekt\StorProjekt\StorProjekt\Debug\StorProjekt.exe
