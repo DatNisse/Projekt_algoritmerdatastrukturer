@@ -58,6 +58,19 @@ double DC::DataClass::calcAvreage(bool inside, int type, int index[2])
 	return -1;
 }
 
+int DC::DataClass::search(bool inside, int day[3])
+{
+	for (int i = 0; i < dataVector.size(); i++)
+	{
+		if (dataVector.at(i).day == day && dataVector.at(i).inside == inside)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void DC::DataClass::swap(dataDay* a, dataDay* b)
 {
 	dataDay t = *a;
@@ -123,6 +136,8 @@ void DC::DataClass::listSort(char type, int low, int high) //sorts list dependin
 
 
 
+
+
 void DataClass::getData(bool inside)
 {
 	dataDay d;
@@ -170,6 +185,65 @@ void DataClass::getData(bool inside)
 
 
 
+
+void DC::DataClass::fixDate(string date, int* a)
+{
+	if (date.length() == 8)
+	{
+		a[0] = stoi(date.substr(0, 4));
+		a[1] = stoi(date.substr(5, 2));
+		a[2] = stoi(date.substr(8, 2));
+	}
+
+	return;
+}
+
+string DC::DataClass::avreage(bool inside, char type, int date[3])
+{
+	size_t index = search(inside, date);
+	string s;
+	if (index != -1)
+	{
+		if (inside)
+		{
+			s = "The avreage inside ";
+		}
+		else
+		{
+			s = "The avreage outside ";
+		}
+		if (type == 't')
+		{
+			s += "temperature is ";
+			s += dataVector.at(search(inside, date)).avgT;
+		}
+		else if (type == 'h')
+		{
+			s += "humidity is ";
+			s += dataVector.at(search(inside, date)).avgH;
+		}
+		else if (type == 'm')
+		{
+			s += "risk for mold is ";
+			s += dataVector.at(search(inside, date)).avgM;
+		}
+
+		s += " at the date: ";
+		s += date[0]; 
+		s += ""; 
+		s += date[1]; 
+		s += ""; 
+		s += date[2];
+
+		return s;
+	}
+	return "The date provided has no entry in database!";
+}
+
+string DC::DataClass::minMax(bool inside, char type, int date[3])
+{
+	return;
+}
 
 DataClass::DataClass()
 {
