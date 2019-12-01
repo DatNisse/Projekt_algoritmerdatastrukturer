@@ -116,7 +116,7 @@ double DataCollector::moldIndex(int h, double t)
 
 	double k0, kv; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
 	double mold;
-	k0 = 22 / 15;
+	k0 = 22.0 / 15.0;
 	if (t <= 0 || t > 50) // if any of these cases are true, the data points slope is outside the "mold-zone", therefore default value is set to 0.
 	{
 		mold = 0;
@@ -130,7 +130,7 @@ double DataCollector::moldIndex(int h, double t)
 		}
 		else
 		{
-			mold = h / 78;
+			mold = double(h) / double(78);
 		}
 	}
 
@@ -139,17 +139,19 @@ double DataCollector::moldIndex(int h, double t)
 
 int Collector::DataCollector::getIndex(int date[3], int prevIndex)
 {
-	
-	for (int i = prevIndex; i < listDataDetail.size(); i++)
+	int y = date[0], m = date[1], da = date[2];
+	data d;
+	for (int i = prevIndex + 1; i < listDataDetail.size(); i++)
 	{
-		if (listDataDetail.at(i).day[0] != date[0] || listDataDetail.at(i).day[2] != date[2] || listDataDetail.at(i).day[2] != date[2])
+		d = listDataDetail.at(i);
+		if (listDataDetail.at(i).day[0] != date[0] || listDataDetail.at(i).day[1] != date[1] || listDataDetail.at(i).day[2] != date[2])
 		{
-			return i;
+			return i - 1;
 		}
 		
 	}
 
-	return -1;
+	return int(listDataDetail.size());
 }
 
 

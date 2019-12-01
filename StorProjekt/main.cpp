@@ -26,7 +26,8 @@ int main()
 	cout << "start" << endl;
 	DC::DataClass dataClass;
 	int choice;
-	int date[3] = {-1, -1, -1};
+	int dateInput;
+	bool inside;
 	string t1, t2, t3;
 	
 	
@@ -45,22 +46,46 @@ int main()
 				cin >> t2;
 				cout << "Is it the value of the inside sensor you are looking for? (y/n)";
 				cin >> t3;
-				if (date[0] == -1 || date[1] == -1 || date[2] == -1)
+				dateInput = stoi(t1.substr(0, 4))*10000;
+				dateInput += stoi(t1.substr(5, 2))*100;
+				dateInput += stoi(t1.substr(8, 2));
+				//dataClass.fixDate(t1, &dateInput);
+				/*if (dateInput[0] == -1 || dateInput[1] == -1 || dateInput[2] == -1)
 				{
-					cout << "Invalid date has been input!" << endl;
+					cout << "Invalid date has been input!" << endl << "Press any key to continue.";
+					cin >> t1;
+				}*/
+				if (t3 == "y")
+				{
+					inside = true;
 				}
-				else if (t3 == "y")
+				else 
 				{
-					dataClass.fixDate(t1, date);
-					dataClass.avreage(true, char(t2[0]), date);
+					inside = false;
 				}
 
+				cout << "At the date: " << t1 << dataClass.avreage(true, char(t2[0]), dateInput) << endl << "Press any key to continue.";
+				cin >> t1;
 				break;
 			}
 
 			case 2:
 			{
-				cout << "test" << endl;
+				cout << "Please specify what type of maximum value your looking for: (mold = m, temp = t, humidity = h )" << endl;
+				cin >> t2;
+				cout << "Is it the value of the inside sensor you are looking for? (y/n)";
+				cin >> t3;
+				if (t3 == "y")
+				{
+					inside = true;
+				}
+				else
+				{
+					inside = false;
+				}
+				cout << dataClass.minMax(inside, char(t2[0])) << endl << "Press any key to continue.";
+				cin >> t1;
+
 				break;
 			}
 

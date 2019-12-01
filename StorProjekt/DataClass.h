@@ -19,8 +19,8 @@ namespace DC
 		};
 		Collector::DataCollector coll;
 		std::vector < DC::DataClass::dataDay > dataVector;
-		int search(bool inside, int day[3]);
-
+		int searchDate(bool inside, int day);
+		int searchHigh(bool inside, int start);
 		void swap(dataDay* a, dataDay* b);
 		int partition(int low, int high, char type);
 		void listSort(char type, int low, int high);
@@ -31,9 +31,9 @@ namespace DC
 		
 
 	public:
-		void fixDate(std::string date, int* a);
-		std::string avreage(bool inside, char type, int date[3]);
-		std::string minMax(bool inside, char type, int date[3]);
+		void fixDate(std::string date, int a[3]);
+		std::string avreage(bool inside, char type, int date);
+		std::string minMax(bool inside, char type);
 
 		DataClass();
 

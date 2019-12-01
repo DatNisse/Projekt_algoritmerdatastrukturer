@@ -58,11 +58,17 @@ double DC::DataClass::calcAvreage(bool inside, int type, int index[2])
 	return -1;
 }
 
-int DC::DataClass::search(bool inside, int day[3])
+int DC::DataClass::searchDate(bool inside, int day)
 {
+	int tDay[3];
+
+	tDay[0] = int(day / 10000);
+	tDay[1] = (int(day/100) * 100 - int(day / 10000) * 10000) / 100;
+	tDay[2] = day - int(day / 100) * 100;
+
 	for (int i = 0; i < dataVector.size(); i++)
 	{
-		if (dataVector.at(i).day == day && dataVector.at(i).inside == inside)
+		if (dataVector.at(i).day[0] == tDay[0] && dataVector.at(i).day[1] == tDay[1] && dataVector.at(i).day[2] == tDay[2] && dataVector.at(i).inside == inside)
 		{
 			return i;
 		}
@@ -71,7 +77,21 @@ int DC::DataClass::search(bool inside, int day[3])
 	return -1;
 }
 
-void DC::DataClass::swap(dataDay* a, dataDay* b)
+int DC::DataClass::searchHigh(bool inside, int start)
+{
+	
+	for (size_t i = start; i < dataVector.size(); i++)
+	{
+		if (dataVector.at(i).inside == inside)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+void DC::DataClass::swap(dataDay *a, dataDay *b)
 {
 	dataDay t = *a;
 	*a = *b;
@@ -80,39 +100,46 @@ void DC::DataClass::swap(dataDay* a, dataDay* b)
 
 int DC::DataClass::partition(int low, int high, char type)
 {
-	
+	dataDay pivot = dataVector.at(high);
 	int i = (low - 1); // Index of smaller element  
 
-	for (int j = low; j <= high - 1; j++)
+	if (type == 'm')
 	{
-		if (type == 'm')
+		// If current element is smaller than the pivot  
+		for (int j = low; j <= high - 1; j++)
 		{
-			// If current element is smaller than the pivot  
-			if (dataVector[j].avgM < dataVector[high].avgM)
-			{
-				i++; // increment index of smaller element  
-				swap(&dataVector[i], &dataVector[j]);
-			}
-		}
-		else if (type == 'h')
-		{
-			// If current element is smaller than the pivot  
-			if (dataVector[j].avgH < dataVector[high].avgH)
-			{
-				i++; // increment index of smaller element  
-				swap(&dataVector[i], &dataVector[j]);
-			}
-		}
-		else if (type == 't')
-		{
-			// If current element is smaller than the pivot  
-			if (dataVector[j].avgT < dataVector[high].avgT)
+			if (dataVector[j].avgM < pivot.avgM)
 			{
 				i++; // increment index of smaller element  
 				swap(&dataVector[i], &dataVector[j]);
 			}
 		}
 	}
+	else if (type == 'h')
+	{
+		// If current element is smaller than the pivot  
+		for (int j = low; j <= high - 1; j++)
+		{
+			if (dataVector[j].avgH < pivot.avgH)
+			{
+				i++; // increment index of smaller element  
+				swap(&dataVector[i], &dataVector[j]);
+			}
+		}
+	}
+	else if (type == 't')
+	{
+		// If current element is smaller than the pivot  
+		for (int j = low; j <= high - 1; j++)
+		{
+			if (dataVector[j].avgT < pivot.avgT)
+			{
+				i++; // increment index of smaller element  
+				swap(&dataVector[i], &dataVector[j]);
+			}
+		}
+	}
+	
 	swap(&dataVector[i + 1], &dataVector[high]);
 	return (i + 1);
 	
@@ -169,10 +196,16 @@ void DataClass::getData(bool inside)
 		
 
 		dataVector.push_back(d);
-
-		for (int i = 0; i < 3; i++)
+		if (index[0] != coll.listDataDetail.size())
 		{
-			date[i] = coll.listDataDetail.at(index[0] + 1).day[i]; //sets start date for next day
+			for (int i = 0; i < 3; i++)
+			{
+				date[i] = coll.listDataDetail.at(index[0] + 1).day[i]; //sets start date for next day
+			}
+		}
+		else
+		{
+			index[0] = -1;
 		}
 
 
@@ -186,27 +219,32 @@ void DataClass::getData(bool inside)
 
 
 
-void DC::DataClass::fixDate(string date, int* a)
+void DC::DataClass::fixDate(string date, int a[3])
 {
-	if (date.length() == 8)
+	
+	if (date.length() == 10)
 	{
-		a[0] = stoi(date.substr(0, 4));
-		a[1] = stoi(date.substr(5, 2));
-		a[2] = stoi(date.substr(8, 2));
+		int temp;
+		temp = stoi(date.substr(0, 4));
+		a[0] = temp;
+		temp = stoi(date.substr(5, 2));
+		a[1] = temp;
+		temp = stoi(date.substr(8, 2));
+		a[2] = temp;
 	}
 
 	return;
 }
 
-string DC::DataClass::avreage(bool inside, char type, int date[3])
+string DC::DataClass::avreage(bool inside, char type, int date)
 {
-	size_t index = search(inside, date);
+	size_t index = searchDate(inside, date);
 	string s;
 	if (index != -1)
 	{
 		if (inside)
 		{
-			s = "The avreage inside ";
+			s = " The avreage inside ";
 		}
 		else
 		{
@@ -215,34 +253,102 @@ string DC::DataClass::avreage(bool inside, char type, int date[3])
 		if (type == 't')
 		{
 			s += "temperature is ";
-			s += dataVector.at(search(inside, date)).avgT;
+			s += to_string(dataVector.at(index).avgT);
 		}
 		else if (type == 'h')
 		{
 			s += "humidity is ";
-			s += dataVector.at(search(inside, date)).avgH;
+			s += to_string(dataVector.at(index).avgH);
 		}
 		else if (type == 'm')
 		{
 			s += "risk for mold is ";
-			s += dataVector.at(search(inside, date)).avgM;
+			s += to_string(dataVector.at(index).avgM);
 		}
-
-		s += " at the date: ";
-		s += date[0]; 
-		s += ""; 
-		s += date[1]; 
-		s += ""; 
-		s += date[2];
 
 		return s;
 	}
-	return "The date provided has no entry in database!";
+	return " no data found exists!";
 }
 
-string DC::DataClass::minMax(bool inside, char type, int date[3])
+string DC::DataClass::minMax(bool inside, char type)
 {
-	return;
+	
+	string s;
+	int n = dataVector.size();
+	listSort(type, 0, n - 1);
+	int index = searchHigh(inside, 0);
+	
+	if (inside)
+	{
+		s = "The highest inside ";
+	}
+	else
+	{
+		s = "The highest outside ";
+	}
+	if (type == 't')
+	{
+		
+		s += "temperature was on ";
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		s += " with a avreage temperature of: ";
+		s += to_string(dataVector.at(index).avgT);
+	}
+	else if (type == 'h')
+	{
+		s += "humidity is ";
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		s += " with a avreage humidity of: ";
+		s += to_string(dataVector.at(index).avgH);
+	}
+	else if (type == 'm')
+	{
+		s += "risk for mold is ";
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		s += " with a avreage mold risk of: ";
+		s += to_string(dataVector.at(index).avgM);
+	}
+
+	s += "\n The next dates with highest values where the following: ";
+	for (int i = 0 ; i < 4 ; i++, s+= "\n")
+	{
+		index = searchHigh(inside, index + 1);
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		if (type == 't')
+		{
+			s += " with a avreage temperature of: ";
+			s += to_string(dataVector.at(index).avgT);
+		}
+		else if (type == 'h')
+		{
+			s += " with a avreage humidity of: ";
+			s += to_string(dataVector.at(index).avgH);			 
+		}
+		else if (type == 'm')
+		{
+			s += " with a avreage mold risk of: ";
+			s += to_string(dataVector.at(index).avgM);
+		}
+	}
+	
+	return s;
 }
 
 DataClass::DataClass()

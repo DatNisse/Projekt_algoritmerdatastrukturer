@@ -1,6 +1,4 @@
 ﻿  DataClass.cpp
-  DataCollector.cpp
-  main.cpp
-  Generating Code...
-C:\Projekt\StorProjekt\StorProjekt\DataCollector.cpp(56,24): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(87,12): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(278,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   StorProjekt.vcxproj -> C:\Projekt\StorProjekt\StorProjekt\x64\Debug\StorProjekt.exe
