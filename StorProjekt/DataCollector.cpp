@@ -166,7 +166,7 @@ void DataCollector::readData()
 {
 	int n = 0;
 	string tmp;
-	ifstream text("tempdata4.txt");
+	ifstream text("tempdata4short.txt");
 
 	if (text.is_open())
 	{
