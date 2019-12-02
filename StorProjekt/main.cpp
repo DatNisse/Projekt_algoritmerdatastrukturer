@@ -15,7 +15,8 @@ void printMenu()
 	cout << "1: Avreage value." << endl;
 	cout << "2: Sorting by highest." << endl;
 	cout << "3: Sorting by lowest." << endl;
-	cout << "4: Exit program." << endl << endl;
+	cout << "4: Winter/Autum." << endl;
+	cout << "5: Exit program." << endl << endl;
 
 	cout << "Ditt val: ";
 }
@@ -63,9 +64,9 @@ int main()
 				{
 					inside = false;
 				}
-
-				cout << "At the date: " << t1 << dataClass.avreage(true, char(t2[0]), dateInput) << endl << "Press any key to continue.";
+				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl;
 				cin >> t1;
+
 				break;
 			}
 
@@ -83,7 +84,7 @@ int main()
 				{
 					inside = false;
 				}
-				cout << dataClass.minMax(inside, char(t2[0])) << endl << "Press any key to continue.";
+				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl;
 				cin >> t1;
 
 				break;
@@ -91,11 +92,39 @@ int main()
 
 			case 3:
 			{
-				cout << "test" << endl;
+				cout << "Please specify what type of minimum value your looking for: (mold = m, temp = t, humidity = h )" << endl;
+				cin >> t2;
+				cout << "Is it the value of the inside sensor you are looking for? (y/n)";
+				cin >> t3;
+				if (t3 == "y")
+				{
+					inside = true;
+				}
+				else
+				{
+					inside = false;
+				}
+				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl;
+				cin >> t1;
+
 				break;
 			}
 
 			case 4:
+			{
+				cout << "Is it when winter starts that you are looking for? (y/n)" << endl;
+				cin >> t3;
+				if (t3 == "y")
+				{
+					inside = true;
+				}
+				cout << dataClass.getWintAut(inside) << endl << "Press any key to continue." << endl;
+				cin >> t1;
+
+				break;
+			}
+
+			case 5:
 			{
 				cout << "Exiting...";
 				break;
@@ -105,6 +134,6 @@ int main()
 				cout << "Invalid Input" << endl;
 
 		}
-	} while (choice != 4);
+	} while (choice != 5);
 
 }

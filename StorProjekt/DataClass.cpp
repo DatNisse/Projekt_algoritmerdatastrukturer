@@ -77,10 +77,23 @@ int DC::DataClass::searchDate(bool inside, int day)
 	return -1;
 }
 
-int DC::DataClass::searchHigh(bool inside, int start)
+int DC::DataClass::searchLow(bool inside, int start)
 {
 	
-	for (size_t i = start; i < dataVector.size(); i++)
+	for (int i = start; i < dataVector.size(); i++)
+	{
+		if (dataVector.at(i).inside == inside)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+int DC::DataClass::searchHigh(bool inside, int start)
+{
+	for (int i = start; i > 0 ; i--)
 	{
 		if (dataVector.at(i).inside == inside)
 		{
@@ -161,8 +174,83 @@ void DC::DataClass::listSort(char type, int low, int high) //sorts list dependin
 	}
 }
 
+void DC::DataClass::bubbleSort(int high, char type)
+{
+	if (type == 'm')
+	{
+		for (int i = 0; i < high - 1; i++)
+		{
+			// Last i elements are already in place   
+			for (int j = 0; j < high - i - 1; j++)
+			{
+				if (dataVector[j].avgM > dataVector[j + 1].avgM)
+				{
+					swap(&dataVector[j], &dataVector[j + 1]);
+				}
+			}
+		}
+	}
+	else if (type == 'h')
+	{
+		for (int i = 0; i < high - 1; i++)
+		{
+			// Last i elements are already in place   
+			for (int j = 0; j < high - i - 1; j++)
+			{
+				if (dataVector[j].avgH > dataVector[j + 1].avgH)
+				{
+					swap(&dataVector[j], &dataVector[j + 1]);
+				}
+			}
+		}
+	}
+	else if (type == 't')
+	{
+		for (int i = 0; i < high - 1; i++)
+		{
+			// Last i elements are already in place   
+			for (int j = 0; j < high - i - 1; j++)
+			{
+				if (dataVector[j].avgT > dataVector[j + 1].avgT)
+				{
+					swap(&dataVector[j], &dataVector[j + 1]);
+				}
+			}
+		}
+	}			
+	else if (type == 'd')
+	{
+		for (int n = 3; n > 0; n--)
+		{
+			for (int i = 0; i < high - 1; i++)
+			{
+				// Last i elements are already in place   
+				for (int j = 0; j < high - i - 1; j++)
+				{
+					if (dataVector[j].day[n] > dataVector[j + 1].day[n])
+					{
+						swap(&dataVector[j], &dataVector[j + 1]);
+					}
+				}
+			}
+		}		
+	}
+}
 
 
+
+
+
+// Driver program to test above functions 
+/*int main()
+{
+	int arr[] = { 64, 34, 25, 12, 22, 11, 90 };
+	int n = sizeof(arr) / sizeof(arr[0]);
+	bubbleSort(arr, n);
+	printf("Sorted array : \n");
+	printArray(arr, n);
+	return 0;
+}*/
 
 
 void DataClass::getData(bool inside)
@@ -271,13 +359,14 @@ string DC::DataClass::avreage(bool inside, char type, int date)
 	return " no data found exists!";
 }
 
-string DC::DataClass::minMax(bool inside, char type)
+string DC::DataClass::getMax(bool inside, char type)
 {
 	
 	string s;
 	int n = dataVector.size();
-	listSort(type, 0, n - 1);
-	int index = searchHigh(inside, 0);
+	//listSort(type, 0, n - 1);
+	bubbleSort(n, type);
+	int index = searchHigh(inside, n - 1);
 	
 	if (inside)
 	{
@@ -325,7 +414,7 @@ string DC::DataClass::minMax(bool inside, char type)
 	s += "\n The next dates with highest values where the following: ";
 	for (int i = 0 ; i < 4 ; i++, s+= "\n")
 	{
-		index = searchHigh(inside, index + 1);
+		index = searchHigh(inside, index - 1);
 		s += to_string(dataVector.at(index).day[0]);
 		s += "-";
 		s += to_string(dataVector.at(index).day[1]);
@@ -348,6 +437,158 @@ string DC::DataClass::minMax(bool inside, char type)
 		}
 	}
 	
+	return s;
+}
+
+std::string DC::DataClass::getMin(bool inside, char type)
+{
+
+
+	string s;
+	int n = dataVector.size();
+	//listSort(type, 0, n - 1);
+	bubbleSort(n, type);
+	int index = searchLow(inside, 0);
+
+	if (inside)
+	{
+		s = "The lowest inside ";
+	}
+	else
+	{
+		s = "The lowest outside ";
+	}
+	if (type == 't')
+	{
+
+		s += "temperature was on the ";
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		s += " with a avreage temperature of: ";
+		s += to_string(dataVector.at(index).avgT);
+	}
+	else if (type == 'h')
+	{
+		s += "humidity was on the ";
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		s += " with a avreage humidity of: ";
+		s += to_string(dataVector.at(index).avgH);
+	}
+	else if (type == 'm')
+	{
+		s += "risk for mold was on the ";
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		s += " with a avreage mold risk of: ";
+		s += to_string(dataVector.at(index).avgM);
+	}
+
+	s += "\nThe next dates with lowest values where the following: \n";
+	for (int i = 0; i < 4; i++, s += "\n")
+	{
+		index = searchLow(inside, index + 1);
+		s += to_string(dataVector.at(index).day[0]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[1]);
+		s += "-";
+		s += to_string(dataVector.at(index).day[2]);
+		if (type == 't')
+		{
+			s += " with a avreage temperature of: ";
+			s += to_string(dataVector.at(index).avgT);
+		}
+		else if (type == 'h')
+		{
+			s += " with a avreage humidity of: ";
+			s += to_string(dataVector.at(index).avgH);
+		}
+		else if (type == 'm')
+		{
+			s += " with a avreage mold risk of: ";
+			s += to_string(dataVector.at(index).avgM);
+		}
+	}
+
+	return s;
+}
+
+std::string DC::DataClass::getWintAut(bool winter)
+{
+	string s;
+	int start = 0, counter = 0;
+	dataDay d1;
+	bubbleSort(dataVector.size(), 'd');
+	if (winter == false)
+	{
+		for (int i = start; i < dataVector.size()-1 && counter < 5 ; i++)
+		{
+			if (dataVector.at(i).avgT <= 10 && dataVector.at(i).inside == false)
+			{
+				counter = 1;
+				d1 = dataVector.at(i);
+				start = i;
+				for (int j = start; counter < 5; i++)
+				{
+					if (dataVector.at(i).avgT > 10 && dataVector.at(i).inside == false)
+					{
+						counter = 0;
+						break;
+					}
+					counter++;
+				}
+			}
+		}
+		s = "Autum began on the date: ";
+	}
+	else
+	{
+		for (int i = start; i < dataVector.size() - 1 && counter < 5; i++)
+		{
+			if (dataVector.at(i).avgT <= 0 && dataVector.at(i).inside == false)
+			{
+				counter = 1;
+				d1 = dataVector.at(i);
+				start = i;
+				for (int j = start; counter < 5; i++)
+				{
+					if (dataVector.at(i).avgT > 0 && dataVector.at(i).inside == false)
+					{
+						counter = 0;
+						break;
+					}
+					counter++;
+				}
+			}
+		}
+		s = "Winter began on the date: ";
+	}
+	if (d1.day[0] > 0)
+	{
+		s += to_string(d1.day[0]) + "-" + to_string(d1.day[1]) + "-" + to_string(d1.day[2]);
+	}
+	else
+	{
+		if (winter == true)
+		{
+			s = "Winter never began acording to temperature";
+		}
+		else
+		{
+			s = "Autum never began acording to temperature";
+		}
+	}
+	
+
 	return s;
 }
 

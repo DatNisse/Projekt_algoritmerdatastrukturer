@@ -1,5 +1,6 @@
 #include "DataCollector.h"
 #include "DataClass.h"
+#include <math.h>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -53,7 +54,7 @@ void DataCollector::sortDataDetail()
 			}
 		}
 		
-		d.mogel = moldIndex(d.temp, d.humid);
+		d.mogel = moldIndex(d.humid, d.temp);
 		listDataDetail.push_back(d); //adds the data element to the usable list
 	}
 	rawData.clear();
@@ -109,15 +110,16 @@ double DataCollector::moldIndex(int h, double t)
 {
 	/*
 			The mold diagram uses the following curve for mold risk with the formula: y = 100 - (22 / 15) x; where y is the humidity and x is the temperature.
-			The "100" is the start value of the curve and the "22 / 15" is the slope of the diagram.
+			The "100" is the start value of the curve and the negative of "22 / 15" is the slope of the diagram.
 			Since the angle of the slope is unchanging throughout the whole diagram it can be used for values on the entire sloped part of the diagram.
 			Since the angle of the horizontal line is also unchanging, it can be described as "t / 78" for the same effect. Values above 1 does have a chance of mold.
 		*/
 
-	double k0, kv; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
+	//double k0, kv; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
+	
 	double mold;
-	k0 = 22.0 / 15.0;
-	if (t <= 0 || t > 50) // if any of these cases are true, the data points slope is outside the "mold-zone", therefore default value is set to 0.
+	double k0 = 22.0 / 15.0, kv;
+	if (t <= 0 || t > 50 || h <= 78) // if any of these cases are true, the data points slope is outside the "mold-zone", therefore default value is set to 0.
 	{
 		mold = 0;
 	}
@@ -126,11 +128,13 @@ double DataCollector::moldIndex(int h, double t)
 		if (t < 15) //determines if the value is on flat or sloped part of curve
 		{
 			kv = (100 - h) / t;
-			mold = kv / k0;
+			mold = (kv / k0);
+			//mold = ((h - 78.0) * (t / 15.0)) * 0.22;
+
 		}
 		else
 		{
-			mold = double(h) / double(78);
+			mold = (double(h) / double(78));
 		}
 	}
 
@@ -166,7 +170,7 @@ void DataCollector::readData()
 {
 	int n = 0;
 	string tmp;
-	ifstream text("tempdata4short.txt");
+	ifstream text("tempdata4.txt");
 
 	if (text.is_open())
 	{
