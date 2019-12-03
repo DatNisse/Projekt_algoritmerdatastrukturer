@@ -1,7 +1,8 @@
 ﻿  DataClass.cpp
-C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(366,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(448,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(402,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(489,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  DataCollector.cpp
   main.cpp
   Generating Code...
-C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(530,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(574,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   StorProjekt.vcxproj -> C:\Projekt\StorProjekt\StorProjekt\x64\Debug\StorProjekt.exe

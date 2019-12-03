@@ -12,7 +12,10 @@ using namespace Collector;
 
 
 
-
+	/*
+	Function calculates an avereage value of provided type.
+	This function is used for preparing values to later be entered into main buffer dataVector by different function.
+	*/
 double DC::DataClass::calcAvreage(bool inside, int type, int index[2])
 {
 	double total = 0;
@@ -58,10 +61,14 @@ double DC::DataClass::calcAvreage(bool inside, int type, int index[2])
 	return -1;
 }
 
+	/*
+	Function retrives the index of where specific date in- or outdoors in list.
+	*/
 int DC::DataClass::searchDate(bool inside, int day)
 {
 	int tDay[3];
 
+	//formates date variable to compare against entries in dataVector.
 	tDay[0] = int(day / 10000);
 	tDay[1] = (int(day/100) * 100 - int(day / 10000) * 10000) / 100;
 	tDay[2] = day - int(day / 100) * 100;
@@ -77,6 +84,10 @@ int DC::DataClass::searchDate(bool inside, int day)
 	return -1;
 }
 
+
+	/*
+	Finds index of lowest value based on if inside or outside.
+	*/
 int DC::DataClass::searchLow(bool inside, int start)
 {
 	
@@ -91,6 +102,10 @@ int DC::DataClass::searchLow(bool inside, int start)
 	return -1;
 }
 
+
+	/*
+	Finds index of highest value based on if inside or outside.
+	*/
 int DC::DataClass::searchHigh(bool inside, int start)
 {
 	for (int i = start; i > 0 ; i--)
@@ -104,6 +119,10 @@ int DC::DataClass::searchHigh(bool inside, int start)
 	return -1;
 }
 
+
+	/*
+	Function used by bubbleSort and listSort to swap values of 2 data points in dataVector.
+	*/
 void DC::DataClass::swap(dataDay *a, dataDay *b)
 {
 	dataDay t = *a;
@@ -111,6 +130,11 @@ void DC::DataClass::swap(dataDay *a, dataDay *b)
 	*b = t;
 }
 
+	
+	/*
+	Function is used to partition and sort, utilizing a quicksort style function. It is used by the function listSort.
+	listSort() is not used in program as is.
+	*/
 int DC::DataClass::partition(int low, int high, char type)
 {
 	dataDay pivot = dataVector.at(high);
@@ -159,6 +183,11 @@ int DC::DataClass::partition(int low, int high, char type)
 	//return 0;
 }
 
+
+	/*
+	Function is an adaptation of a quicksort style sorting method. 
+	function is not used in program.
+	*/
 void DC::DataClass::listSort(char type, int low, int high) //sorts list depending on requested value
 {
 	if (low < high)
@@ -174,9 +203,15 @@ void DC::DataClass::listSort(char type, int low, int high) //sorts list dependin
 	}
 }
 
+	/*
+	Function sorts list based on what type of value to sort, i.e is it sorting by mold, temp, humidity or date.
+	Highest value will be placed at the end of dataVector while lowest will be placed at begining (i.e 0)
+	Since the array that is to be sorted is a private vector of this class, no array or list needs to be passed to function.
+	*/
 void DC::DataClass::bubbleSort(int high, char type)
 {
-	if (type == 'm')
+	
+	if (type == 'm') //sorts based on mold
 	{
 		for (int i = 0; i < high - 1; i++)
 		{
@@ -190,7 +225,7 @@ void DC::DataClass::bubbleSort(int high, char type)
 			}
 		}
 	}
-	else if (type == 'h')
+	else if (type == 'h') //sorts based on humidity
 	{
 		for (int i = 0; i < high - 1; i++)
 		{
@@ -204,7 +239,7 @@ void DC::DataClass::bubbleSort(int high, char type)
 			}
 		}
 	}
-	else if (type == 't')
+	else if (type == 't') //sorts based on temperature
 	{
 		for (int i = 0; i < high - 1; i++)
 		{
@@ -218,9 +253,9 @@ void DC::DataClass::bubbleSort(int high, char type)
 			}
 		}
 	}			
-	else if (type == 'd')
+	else if (type == 'd') //sorts based on date
 	{
-		for (int n = 3; n > 0; n--)
+		for (int n = 3; n > 0; n--) //starts whith sorting by day, then month.
 		{
 			for (int i = 0; i < high - 1; i++)
 			{
@@ -237,25 +272,13 @@ void DC::DataClass::bubbleSort(int high, char type)
 	}
 }
 
-
-
-
-
-// Driver program to test above functions 
-/*int main()
-{
-	int arr[] = { 64, 34, 25, 12, 22, 11, 90 };
-	int n = sizeof(arr) / sizeof(arr[0]);
-	bubbleSort(arr, n);
-	printf("Sorted array : \n");
-	printArray(arr, n);
-	return 0;
-}*/
-
-
+	/*
+	Function is used by class constructor to retrive and add values to main buffer dataVector.
+	This function condenses the data from the list listDataDetrail (consisting of all lines of data from .txt) down to a list of per day avreages. 
+	*/
 void DataClass::getData(bool inside)
 {
-	dataDay d;
+	dataDay d; //declare struct for adding later into list.
 	
 	int date[3], index[2] = {0, 0}; //date that is added for reference
 	
@@ -275,16 +298,19 @@ void DataClass::getData(bool inside)
 			d.day[1] = date[1];
 			d.day[2] = date[2];
 		}
-		
-		d.avgM = calcAvreage(inside, 1, index);
+
+		//calls functions to calculate avregeas for mold, temp and humid
+		d.avgM = calcAvreage(inside, 1, index); 
 		d.avgT = calcAvreage(inside, 2, index);
 		d.avgH = calcAvreage(inside, 3, index);
+
+		//sets index for last entry on latest date in listDataDetail.
 		index[1] = index[0];
 
 		
 
-		dataVector.push_back(d);
-		if (index[0] != coll.listDataDetail.size())
+		dataVector.push_back(d); //Adds element onto main buffer.
+		if (index[0] != coll.listDataDetail.size()) //if not end of vector, continue with next date
 		{
 			for (int i = 0; i < 3; i++)
 			{
@@ -293,7 +319,8 @@ void DataClass::getData(bool inside)
 		}
 		else
 		{
-			index[0] = -1;
+			//sets -1 to breake cycle
+			index[0] = -1; 
 		}
 
 
@@ -306,7 +333,7 @@ void DataClass::getData(bool inside)
 
 
 
-
+/*
 void DC::DataClass::fixDate(string date, int a[3])
 {
 	
@@ -322,11 +349,15 @@ void DC::DataClass::fixDate(string date, int a[3])
 	}
 
 	return;
-}
+}*/
 
-string DC::DataClass::avreage(bool inside, char type, int date)
+	/*
+	Purpose of function is to compile a string to be printed based on date and requested type provided.
+	string is printed to user in main()
+	*/
+string DC::DataClass::getAvreage(bool inside, char type, int date)
 {
-	size_t index = searchDate(inside, date);
+	int index = searchDate(inside, date); //calls search funktion for index of where value is located in dataVector.
 	string s;
 	if (index != -1)
 	{
@@ -359,14 +390,19 @@ string DC::DataClass::avreage(bool inside, char type, int date)
 	return " no data found exists!";
 }
 
+
+	/*
+	Used by front end to retrive and compile data from dataVector into maximum value of specified type into string.
+	string is printed to user in main()
+	*/
 string DC::DataClass::getMax(bool inside, char type)
 {
 	
 	string s;
 	int n = dataVector.size();
 	//listSort(type, 0, n - 1);
-	bubbleSort(n, type);
-	int index = searchHigh(inside, n - 1);
+	bubbleSort(n, type); //calls sorting of list to speed up linear search
+	int index = searchHigh(inside, n - 1); //calls function for index of max value of specified type
 	
 	if (inside)
 	{
@@ -412,7 +448,7 @@ string DC::DataClass::getMax(bool inside, char type)
 	}
 
 	s += "\n The next dates with highest values where the following: ";
-	for (int i = 0 ; i < 4 ; i++, s+= "\n")
+	for (int i = 0 ; i < 4 ; i++, s+= "\n") //loops to retrive the next dates of intresst, i.e other days of highest value.
 	{
 		index = searchHigh(inside, index - 1);
 		s += to_string(dataVector.at(index).day[0]);
@@ -440,6 +476,11 @@ string DC::DataClass::getMax(bool inside, char type)
 	return s;
 }
 
+
+/*
+Used by front end to retrive and compile data from dataVector into minimum value of specified type into string.
+string is printed to user in main()
+*/
 std::string DC::DataClass::getMin(bool inside, char type)
 {
 
@@ -447,8 +488,8 @@ std::string DC::DataClass::getMin(bool inside, char type)
 	string s;
 	int n = dataVector.size();
 	//listSort(type, 0, n - 1);
-	bubbleSort(n, type);
-	int index = searchLow(inside, 0);
+	bubbleSort(n, type); //calls sorting of list to speed up linear search
+	int index = searchLow(inside, 0); //calls function for index of min value of specified type
 
 	if (inside)
 	{
@@ -494,7 +535,7 @@ std::string DC::DataClass::getMin(bool inside, char type)
 	}
 
 	s += "\nThe next dates with lowest values where the following: \n";
-	for (int i = 0; i < 4; i++, s += "\n")
+	for (int i = 0; i < 4; i++, s += "\n") //loops to retrive the next dates of intresst, i.e other days of lowest value.
 	{
 		index = searchLow(inside, index + 1);
 		s += to_string(dataVector.at(index).day[0]);
@@ -522,6 +563,9 @@ std::string DC::DataClass::getMin(bool inside, char type)
 	return s;
 }
 
+	/*
+	Function determines if and when winter or autum began.
+	*/
 std::string DC::DataClass::getWintAut(bool winter)
 {
 	string s;
@@ -530,15 +574,16 @@ std::string DC::DataClass::getWintAut(bool winter)
 	bubbleSort(dataVector.size(), 'd');
 	if (winter == false)
 	{
-		for (int i = start; i < dataVector.size()-1 && counter < 5 ; i++)
+		for (int i = start; i < dataVector.size()-1 && counter < 5 ; i++) //linear loop through list
 		{
-			if (dataVector.at(i).avgT <= 10 && dataVector.at(i).inside == false)
-			{
+			if (dataVector.at(i).avgT <= 10 && dataVector.at(i).inside == false) //if a temperature that meets criteria is found, date is stored.
+			{				
 				counter = 1;
 				d1 = dataVector.at(i);
-				start = i;
-				for (int j = start; counter < 5; i++)
+				start = i; //sets index of location of first date found.
+				for (int j = start; counter < 5; i++) 
 				{
+					//if 5 values that does also meet criteria is found counter ticks up
 					if (dataVector.at(i).avgT > 10 && dataVector.at(i).inside == false)
 					{
 						counter = 0;
@@ -546,11 +591,16 @@ std::string DC::DataClass::getWintAut(bool winter)
 					}
 					counter++;
 				}
+				if (counter == 0) //if didn't meet criteria for autum, date resets for later failsafe
+				{
+					d1.day[0] = 0;
+				}
 			}
 		}
 		s = "Autum began on the date: ";
 	}
-	else
+
+	else //function is a mirrored version for retriving winter.
 	{
 		for (int i = start; i < dataVector.size() - 1 && counter < 5; i++)
 		{
@@ -568,11 +618,15 @@ std::string DC::DataClass::getWintAut(bool winter)
 					}
 					counter++;
 				}
+				if (counter == 0) //if didn't meet criteria for winter, date resets for later failsafe
+				{
+					d1.day[0] = 0;
+				}
 			}
 		}
 		s = "Winter began on the date: ";
 	}
-	if (d1.day[0] > 0)
+	if (d1.day[0] > 0) //checks to see if any applicable date was found.
 	{
 		s += to_string(d1.day[0]) + "-" + to_string(d1.day[1]) + "-" + to_string(d1.day[2]);
 	}
@@ -592,6 +646,10 @@ std::string DC::DataClass::getWintAut(bool winter)
 	return s;
 }
 
+	/*
+	Constructor of function.
+	Upon program start class is constructed and calls backend for retrival of data.
+	*/
 DataClass::DataClass()
 {
 	

@@ -7,10 +7,13 @@
 
 using namespace std;
 
+	/*
+	Used for printing UI for user.
+	*/
 void printMenu()
 {
 
-	system("CLS");
+	system("CLS"); //clears any previus entries
 	cout << "Possible choices in this program:" << endl;
 	cout << "1: Avreage value." << endl;
 	cout << "2: Sorting by highest." << endl;
@@ -25,7 +28,7 @@ void printMenu()
 int main()
 {
 	cout << "start" << endl;
-	DC::DataClass dataClass;
+	DC::DataClass dataClass; //calls upon constructor for dataClass
 	int choice;
 	int dateInput;
 	bool inside;
@@ -34,12 +37,12 @@ int main()
 	
 	do 
 	{
-		printMenu();
+		printMenu(); //prints menue when loading is complete
 		cin >> choice;
 		
 		switch (int(choice))
 		{
-			case 1:
+			case 1: //Avreage value.
 			{
 				cout << "Please specify day for value: (yyyy-mm-dd)" << endl;
 				cin >> t1;
@@ -47,6 +50,7 @@ int main()
 				cin >> t2;
 				cout << "Is it the value of the inside sensor you are looking for? (y/n)";
 				cin >> t3;
+				//formats date
 				dateInput = stoi(t1.substr(0, 4))*10000;
 				dateInput += stoi(t1.substr(5, 2))*100;
 				dateInput += stoi(t1.substr(8, 2));
@@ -56,6 +60,7 @@ int main()
 					cout << "Invalid date has been input!" << endl << "Press any key to continue.";
 					cin >> t1;
 				}*/
+				//formats bool
 				if (t3 == "y")
 				{
 					inside = true;
@@ -64,17 +69,17 @@ int main()
 				{
 					inside = false;
 				}
-				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl;
+				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl; //calls funtion to retrive specified value
 				cin >> t1;
 
 				break;
 			}
 
-			case 2:
+			case 2: //Sorting by highest.
 			{
 				cout << "Please specify what type of maximum value your looking for: (mold = m, temp = t, humidity = h )" << endl;
 				cin >> t2;
-				cout << "Is it the value of the inside sensor you are looking for? (y/n)";
+				cout << "Is it the value of the inside sensor you are looking for? (y/n)" << endl;
 				cin >> t3;
 				if (t3 == "y")
 				{
@@ -90,11 +95,11 @@ int main()
 				break;
 			}
 
-			case 3:
+			case 3: //Sorting by lowest.
 			{
 				cout << "Please specify what type of minimum value your looking for: (mold = m, temp = t, humidity = h )" << endl;
 				cin >> t2;
-				cout << "Is it the value of the inside sensor you are looking for? (y/n)";
+				cout << "Is it the value of the inside sensor you are looking for? (y/n)" << endl;
 				cin >> t3;
 				if (t3 == "y")
 				{
@@ -110,7 +115,7 @@ int main()
 				break;
 			}
 
-			case 4:
+			case 4: //Winter/Autum.
 			{
 				cout << "Is it when winter starts that you are looking for? (y/n)" << endl;
 				cin >> t3;
@@ -124,7 +129,7 @@ int main()
 				break;
 			}
 
-			case 5:
+			case 5: //Exit program.
 			{
 				cout << "Exiting...";
 				break;
@@ -134,6 +139,6 @@ int main()
 				cout << "Invalid Input" << endl;
 
 		}
-	} while (choice != 5);
+	} while (choice != 5); //loop ends when quit is pressed
 
 }
