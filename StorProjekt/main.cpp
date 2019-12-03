@@ -69,7 +69,7 @@ int main()
 				{
 					inside = false;
 				}
-				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl; //calls funtion to retrive specified value
+				cout << dataClass.getAvreage(inside, char(t2[0]), dateInput) << endl << "Press any key to continue." << endl; //calls funtion to retrive specified value
 				cin >> t1;
 
 				break;
@@ -89,7 +89,7 @@ int main()
 				{
 					inside = false;
 				}
-				cout << dataClass.getMin(inside, char(t2[0])) << endl << "Press any key to continue." << endl;
+				cout << dataClass.getMax(inside, char(t2[0])) << endl << "Press any key to continue." << endl;
 				cin >> t1;
 
 				break;
