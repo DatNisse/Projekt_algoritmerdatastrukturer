@@ -1,2 +1,5 @@
-﻿  main.cpp
+﻿  DataClass.cpp
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(410,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(497,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Projekt\StorProjekt\StorProjekt\DataClass.cpp(584,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   StorProjekt.vcxproj -> C:\Projekt\StorProjekt\StorProjekt\x64\Debug\StorProjekt.exe

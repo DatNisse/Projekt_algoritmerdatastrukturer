@@ -38,6 +38,7 @@ namespace DC
 		std::string getMax(bool inside, char type);
 		std::string getMin(bool inside, char type);
 		std::string getWintAut(bool winter);
+		void printAll();
 
 		DataClass();
 

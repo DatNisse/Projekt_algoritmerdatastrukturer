@@ -19,7 +19,8 @@ void printMenu()
 	cout << "2: Sorting by highest." << endl;
 	cout << "3: Sorting by lowest." << endl;
 	cout << "4: Winter/Autum." << endl;
-	cout << "5: Exit program." << endl << endl;
+	cout << "5: Print datalist" << endl;
+	cout << "6: Exit program." << endl << endl;
 
 	cout << "Ditt val: ";
 }
@@ -123,22 +124,34 @@ int main()
 				{
 					inside = true;
 				}
+				else 
+				{
+					inside = false;
+				}
 				cout << dataClass.getWintAut(inside) << endl << "Press any key to continue." << endl;
 				cin >> t1;
 
 				break;
 			}
 
-			case 5: //Exit program.
+			case 5: //print list
+			{
+				cout << "Printing list:" << endl;
+				dataClass.printAll();
+				cout << endl << "Press any key to continue." << endl;
+				cin >> t1;
+				break;
+			}
+			
+			case 6: //Exit program.
 			{
 				cout << "Exiting...";
 				break;
 			}
-
 			default:
 				cout << "Invalid Input" << endl;
 
 		}
-	} while (choice != 5); //loop ends when quit is pressed
+	} while (choice != 6); //loop ends when quit is pressed
 
 }

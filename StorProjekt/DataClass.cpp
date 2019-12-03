@@ -28,6 +28,11 @@ double DC::DataClass::calcAvreage(bool inside, int type, int index[2])
 			{
 				if (coll.listDataDetail.at(i).inside == inside)
 				{
+					/*if (coll.listDataDetail.at(i).day[0] == 2016 && coll.listDataDetail.at(i).day[1] == 6 && coll.listDataDetail.at(i).day[2] == 17)
+					{
+						cout << endl << to_string(i) << ":\t" << coll.listDataDetail.at(i).mogel << "\t" << coll.listDataDetail.at(i).humid << "\t" << coll.listDataDetail.at(i).temp << "\t" << endl;
+					}*/
+					
 					total += coll.listDataDetail.at(i).mogel;
 					counter++; //for each element added to total, add 1 to counter;
 				}
@@ -282,7 +287,6 @@ void DataClass::getData(bool inside)
 	
 	int date[3], index[2] = {0, 0}; //date that is added for reference
 	
-
 	for (int i = 0; i < 3; i++) //sets first date
 	{
 		date[i] = coll.listDataDetail.at(0).day[i];
@@ -298,11 +302,15 @@ void DataClass::getData(bool inside)
 			d.day[1] = date[1];
 			d.day[2] = date[2];
 		}
-
+		/*if (d.day[0] == 2016 && d.day[1] == 6 && d.day[2] == 17)
+		{
+			cout << "";
+		}*/
 		//calls functions to calculate avregeas for mold, temp and humid
-		d.avgM = calcAvreage(inside, 1, index); 
+		
 		d.avgT = calcAvreage(inside, 2, index);
 		d.avgH = calcAvreage(inside, 3, index);
+		d.avgM = calcAvreage(inside, 1, index);
 
 		//sets index for last entry on latest date in listDataDetail.
 		index[1] = index[0];
@@ -387,7 +395,7 @@ string DC::DataClass::getAvreage(bool inside, char type, int date)
 
 		return s;
 	}
-	return " no data found exists!";
+	return "No data found in list for specified date!";
 }
 
 
@@ -569,25 +577,67 @@ std::string DC::DataClass::getMin(bool inside, char type)
 std::string DC::DataClass::getWintAut(bool winter)
 {
 	string s;
+	bool fail = false;
+	double tempT = 0;
 	int start = 0, counter = 0;
 	dataDay d1;
 	bubbleSort(dataVector.size(), 'd');
 	if (winter == false)
 	{
-		for (int i = start; i < dataVector.size()-1 && counter < 5 ; i++) //linear loop through list
+		for (int i = start; i < dataVector.size() - 1 && counter < 5; i++)
+		{
+
+			if (dataVector.at(i).avgT <= 10.0 && dataVector.at(i).inside == false)
+			{
+				counter = 1;
+				d1 = dataVector.at(i);
+				start = i;
+				for (int j = start; (counter < 6 or fail == false); j++)
+				{
+					if (dataVector.at(j).avgT > 10.0 && dataVector.at(j).inside == false)
+					{
+						counter = 0;
+						fail = true;
+					}
+					else if (dataVector.at(j).inside == false)
+					{
+						counter++; //one more day is added
+					}
+					if (fail == true || counter >= 6) //if it has failed, breaks loop
+					{
+						break;
+					}
+				}
+				if (fail == true) //if didn't meet criteria for winter, date resets for later failsafe
+				{
+					d1.day[0] = 0;
+				}
+			}
+			if (i < dataVector.size() - 1) //if more values are to be controlled, resets fail
+			{
+				fail = false;
+			}
+
+		}
+
+		/*for (int i = start; i < dataVector.size()-1 && counter < 5 ; i++) //linear loop through list
 		{
 			if (dataVector.at(i).avgT <= 10 && dataVector.at(i).inside == false) //if a temperature that meets criteria is found, date is stored.
 			{				
 				counter = 1;
 				d1 = dataVector.at(i);
 				start = i; //sets index of location of first date found.
-				for (int j = start; counter < 5; i++) 
+				for (int j = start; counter != 0; i++) 
 				{
+					if (counter == 6)
+					{
+						break;
+					}
 					//if 5 values that does also meet criteria is found counter ticks up
-					if (dataVector.at(i).avgT > 10 && dataVector.at(i).inside == false)
+					if (dataVector.at(i).avgT > 10.0 && dataVector.at(i).inside == false)
 					{
 						counter = 0;
-						break;
+						
 					}
 					counter++;
 				}
@@ -596,33 +646,46 @@ std::string DC::DataClass::getWintAut(bool winter)
 					d1.day[0] = 0;
 				}
 			}
-		}
+		}*/
 		s = "Autum began on the date: ";
 	}
 
-	else //function is a mirrored version for retriving winter.
+	else if(winter == true) //function is a mirrored version for retriving winter.
 	{
 		for (int i = start; i < dataVector.size() - 1 && counter < 5; i++)
 		{
-			if (dataVector.at(i).avgT <= 0 && dataVector.at(i).inside == false)
+
+			if (dataVector.at(i).avgT <= 0.0 && dataVector.at(i).inside == false)
 			{
 				counter = 1;
 				d1 = dataVector.at(i);
 				start = i;
-				for (int j = start; counter < 5; i++)
+				for (int j = start; (counter < 6 or fail == false); j++)
 				{
-					if (dataVector.at(i).avgT > 0 && dataVector.at(i).inside == false)
+					if (dataVector.at(j).avgT > 0.0 && dataVector.at(j).inside == false)
 					{
 						counter = 0;
+						fail = true;
+					}
+					else if (dataVector.at(j).inside == false)
+					{
+						counter++;
+					}
+					if (fail == true || counter >= 6) //if it has failed, breaks loop
+					{
 						break;
 					}
-					counter++;
 				}
-				if (counter == 0) //if didn't meet criteria for winter, date resets for later failsafe
+				if (fail == true) //if didn't meet criteria for winter, date resets for later failsafe
 				{
 					d1.day[0] = 0;
 				}
 			}
+			if (i < dataVector.size() - 1)
+			{
+				fail = false;
+			}
+			
 		}
 		s = "Winter began on the date: ";
 	}
@@ -644,6 +707,19 @@ std::string DC::DataClass::getWintAut(bool winter)
 	
 
 	return s;
+}
+
+
+	/*
+	Prints entire data
+	*/
+void DC::DataClass::printAll()
+{
+	for (size_t i = 0; i < dataVector.size(); i++)
+	{
+		cout << to_string(i) + ":\t" + to_string(dataVector.at(i).day[0]) + "-" + to_string(dataVector.at(i).day[1]) + "-" + to_string(dataVector.at(i).day[2]) + "\t";
+		cout << to_string(dataVector.at(i).avgT) + "\t" + to_string(dataVector.at(i).avgH) + "\t" + to_string(dataVector.at(i).avgM) + "\t" + to_string(dataVector.at(i).inside) << endl;
+	}
 }
 
 	/*

@@ -111,40 +111,70 @@ void DataCollector::sortDataDetail()
 
 
 	/*
-	Function used to calculate a number representing how much larger the slope of input value is from the slope of curve of moldindex
-	Mold index is in this function a ratio between the datapoints slope and the controllcurves slope. 
-	If the index has a value greater than 1, it is above the curve. Thus there is a risk for mold.
-	The higher the value is, the greater the risk.
+	Function calculates distance of point from curve to give a value of how high the risk of mold is.
+	The function does this by calculating the closest point to the curve and then calculates the distance.
 	*/
 double DataCollector::moldIndex(int h, double t)
 {
 		/*
 			The mold diagram uses the following curve for mold risk with the formula: y = 100 - (22 / 15) x; where y is the humidity and x is the temperature.
 			The "100" is the start value of the curve and the negative of "22 / 15" is the slope of the diagram.
-			Since the angle of the slope is unchanging throughout the whole diagram it can be used for values on the entire sloped part of the diagram.
-			Since the angle of the horizontal line is also unchanging, it can be described as "t / 78" for the same effect. Values above 1 does have a chance of mold.
+
+			To calculate the distance from the curve, the function uses the formula: M = ((x1 + x2)/2, (y1 + y2)/2).
+			this function finds the closest point on the curve to the data point h and t.
+
+			the function then uses the formula: d = sqrt((t - xm)^2 + (h - ym)^2) 
+			where xm is the closest temperature(i.e x value) and ym is the closest humidity(i.e y value)
 		*/
 
 	
 	
-	double mold;
-	double k0 = 22.0 / 15.0, kv; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
-	if (t <= 0 || t > 50 || h <= 78) // if any of these cases are true, the data points slope is outside the "mold-zone", therefore default value is set to 0.
+	double mold, xm, ym, dx, dy;
+	double k0 = 22.0 / 15.0; //k0 is the slope of the zero mold slope, kv is the slope for the data point.
+	if (t <= 0 || t > 50 ) // if any of these cases are true, the data points slope is outside the "mold-zone", therefore default value is set to 0.
 	{
 		mold = 0;
 	}
 	else
 	{
-		if (t < 15) //determines if the value is on flat or sloped part of curve
+		if (t < 15.0) //determines if the value is on flat or sloped part of curve
 		{
-			kv = (100 - h) / t;
-			mold = (kv / k0);
-			//mold = ((h - 78.0) * (t / 15.0)) * 0.22;
-
+			/*
+			Old way of moldindex
+			//kv = (100 - h) / t;
+			//mold = (kv / k0);
+			//mold = ((h - 78.0) * (t / 15.0)) * 0.22
+			*/
+			xm = (((100 - h) / k0) + t) / 2.0;
+			ym = ((100 - k0 * t) + h) / 2.0;
+			if (ym > h) //if the data point provided for humidity is below the curve, the mold risk is zero
+			{
+				mold = 0;
+			}
+			else
+			{
+				dx = pow((t - xm), 2);
+				dy = pow((h - ym), 2);
+				mold = sqrt((dx + dy));
+			}
 		}
 		else
 		{
-			mold = (double(h) / double(78)); //if the value falls under the liniear segment of the curve, a simple ratio is calculated between line and data point for data consistency.
+			/*
+			Old moldy way
+			mold = (double(h) / double(78.0)); //if the value falls under the liniear segment of the curve, a simple ratio is calculated between line and data point for data consistency.
+			*/
+			if (h < 78)
+			{
+				//if the value provided is less than the value of the plane, there is zero risk for mold.
+				mold = 0;
+			}
+			else
+			{
+				//since this part of the curve is a plane, t = xm. therefore the distance is simply h - y
+				mold = h - 78.0;
+			}
+			
 		}
 	}
 
