@@ -135,78 +135,6 @@ void DC::DataClass::swap(dataDay *a, dataDay *b)
 	*b = t;
 }
 
-	
-	/*
-	Function is used to partition and sort, utilizing a quicksort style function. It is used by the function listSort.
-	listSort() is not used in program as is.
-	*/
-int DC::DataClass::partition(int low, int high, char type)
-{
-	dataDay pivot = dataVector.at(high);
-	int i = (low - 1); // Index of smaller element  
-
-	if (type == 'm')
-	{
-		// If current element is smaller than the pivot  
-		for (int j = low; j <= high - 1; j++)
-		{
-			if (dataVector[j].avgM < pivot.avgM)
-			{
-				i++; // increment index of smaller element  
-				swap(&dataVector[i], &dataVector[j]);
-			}
-		}
-	}
-	else if (type == 'h')
-	{
-		// If current element is smaller than the pivot  
-		for (int j = low; j <= high - 1; j++)
-		{
-			if (dataVector[j].avgH < pivot.avgH)
-			{
-				i++; // increment index of smaller element  
-				swap(&dataVector[i], &dataVector[j]);
-			}
-		}
-	}
-	else if (type == 't')
-	{
-		// If current element is smaller than the pivot  
-		for (int j = low; j <= high - 1; j++)
-		{
-			if (dataVector[j].avgT < pivot.avgT)
-			{
-				i++; // increment index of smaller element  
-				swap(&dataVector[i], &dataVector[j]);
-			}
-		}
-	}
-	
-	swap(&dataVector[i + 1], &dataVector[high]);
-	return (i + 1);
-	
-	//return 0;
-}
-
-
-	/*
-	Function is an adaptation of a quicksort style sorting method. 
-	function is not used in program.
-	*/
-void DC::DataClass::listSort(char type, int low, int high) //sorts list depending on requested value
-{
-	if (low < high)
-	{
-		/* pi is partitioning index, arr[p] is now
-		at right place */
-		int pi = partition(low, high, type);
-
-		// Separately sort elements before  
-		// partition and after partition  
-		listSort(low, pi - 1, type);
-		listSort(pi + 1, high, type);
-	}
-}
 
 	/*
 	Function sorts list based on what type of value to sort, i.e is it sorting by mold, temp, humidity or date.
@@ -277,6 +205,7 @@ void DC::DataClass::bubbleSort(int high, char type)
 	}
 }
 
+
 	/*
 	Function is used by class constructor to retrive and add values to main buffer dataVector.
 	This function condenses the data from the list listDataDetrail (consisting of all lines of data from .txt) down to a list of per day avreages. 
@@ -338,26 +267,6 @@ void DataClass::getData(bool inside)
 
 }
 
-
-
-
-/*
-void DC::DataClass::fixDate(string date, int a[3])
-{
-	
-	if (date.length() == 10)
-	{
-		int temp;
-		temp = stoi(date.substr(0, 4));
-		a[0] = temp;
-		temp = stoi(date.substr(5, 2));
-		a[1] = temp;
-		temp = stoi(date.substr(8, 2));
-		a[2] = temp;
-	}
-
-	return;
-}*/
 
 	/*
 	Purpose of function is to compile a string to be printed based on date and requested type provided.

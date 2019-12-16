@@ -8,7 +8,6 @@ namespace DC
 	class DataClass
 	{
 	private:
-
 		struct dataDay //struct for avreages per day
 		{
 			int day[3];
@@ -23,8 +22,6 @@ namespace DC
 		int searchLow(bool inside, int start);
 		int searchHigh(bool inside, int start);
 		void swap(dataDay* a, dataDay* b);
-		int partition(int low, int high, char type);
-		void listSort(char type, int low, int high);
 		void bubbleSort(int high, char type);
 		
 

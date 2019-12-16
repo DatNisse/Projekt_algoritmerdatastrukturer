@@ -61,51 +61,7 @@ void DataCollector::sortDataDetail()
 		listDataDetail.push_back(d); //adds the data element to the usable list
 	}
 	rawData.clear();
-	/*
-	int n = 0;
-	while (n < rawData.size())
-	{
-		for (n = 0; n < 5; n++)
-		{
-			if (n == 0) //assings date
-			{
-				d.day[0] = stoi(rawData[n].substr(0, 4));
-				d.day[1] = stoi(rawData[n].substr(5, 2));
-				d.day[2] = stoi(rawData[n].substr(8, 2));
-			}
-			else if (n == 1) //assigns time
-			{
-				d.time[0] = stoi(rawData[n].substr(0, 2));
-				d.time[1] = stoi(rawData[n].substr(3, 2));
-				d.time[2] = stoi(rawData[n].substr(6, 2));
-			}
-			else if (n == 2) //assigns if inside
-			{
-				if (rawData[n] == "Inne")
-				{
-					d.inside = true;
-				}
-				else
-				{
-					d.inside = false;
-				}
-			}
-			else if (n == 3) //assigns temp
-			{
-				d.temp = stod(rawData[n]);
-			}
-			else if (n == 4) //assigns humidity
-			{
-				d.humid = stoi(rawData[n]);
-			}
-		}
-
-		d.mogel = moldIndex(d.temp, d.humid);
-		rawData.erase(rawData.begin(), rawData.begin() + 5); //removes the first 5 elements to save memory
-		listDataDetail.push_back(d); //adds the data element to the usable list
-		//cout << rawData.size() << endl;
-	}
-	*/
+	
 
 }
 

@@ -56,11 +56,7 @@ int main()
 				dateInput += stoi(t1.substr(5, 2))*100;
 				dateInput += stoi(t1.substr(8, 2));
 				//dataClass.fixDate(t1, &dateInput);
-				/*if (dateInput[0] == -1 || dateInput[1] == -1 || dateInput[2] == -1)
-				{
-					cout << "Invalid date has been input!" << endl << "Press any key to continue.";
-					cin >> t1;
-				}*/
+				
 				//formats bool
 				if (t3 == "y")
 				{

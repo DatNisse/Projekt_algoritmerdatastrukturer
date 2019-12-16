@@ -21,6 +21,7 @@ namespace Collector
 		};
 		void sortDataDetail();
 		std::vector<std::string> rawData; //raw list of strings read from the .txt file.
+
 		double moldIndex(int h, double t);
 		void readData();
 	public:
